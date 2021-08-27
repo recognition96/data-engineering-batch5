@@ -187,8 +187,8 @@ The last step is to copy the files under keeyong/data-engineering repo's dags_v2
 ```
 sudo su airflow
 cd ~/
-git clone https://github.com/keeyong/data-engineering-batch4.git
-cp -r data-engineering-batch4/dags/dags/* dags
+git clone https://github.com/keeyong/data-engineering-batch5.git
+cp -r data-engineering-batch4/dags/* dags
 ```
 
 Visit your Airflow Web UI and we should see the DAGs from the repo. Some will have errors displayed and you need to add some variables and connections according to the slides 23 to 25 and 30 of "Airflow Deep-dive" preso.
