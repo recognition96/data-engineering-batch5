@@ -102,13 +102,6 @@ load_examples = False
 AIRFLOW_HOME=/var/lib/airflow airflow db init
 ```
 
-## Add authentication to Airflow Webserver
-
-Run the following command line (make sure to change admin to something else):
-
-```
-airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password heygrepp1
-```
 
 ## Start Airflow Webserver and Scheduler
 
@@ -177,6 +170,14 @@ To check the status of the services, run as follow:
 ```
 sudo systemctl status airflow-webserver
 sudo systemctl status airflow-scheduler
+```
+
+## Add authentication to Airflow Webserver
+
+Run the following command line (make sure to change admin to something else):
+
+```
+airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
 ```
 
 
