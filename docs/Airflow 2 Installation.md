@@ -19,7 +19,8 @@ sudo apt-get install postgresql-server-dev-all
 sudo apt-get install postgresql-common
 sudo pip3 install apache-airflow
 sudo pip3 install apache-airflow-providers-postgres[amazon]
-sudo pip3 install cryptography psycopg2-binary boto3 botocore 
+sudo pip3 install cryptography psycopg2-binary boto3 botocore
+sudo pip3 install SQLAlchemy==1.3.23
 ```
 
 ## airflow:airflow Account Creation
@@ -101,6 +102,13 @@ load_examples = False
 AIRFLOW_HOME=/var/lib/airflow airflow db init
 ```
 
+## Add authentication to Airflow Webserver
+
+Run the following command line (make sure to change admin to something else):
+
+```
+airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password heygrepp1
+```
 
 ## Start Airflow Webserver and Scheduler
 
@@ -180,7 +188,7 @@ The last step is to copy the files under keeyong/data-engineering repo's dags_v2
 sudo su airflow
 cd ~/
 git clone https://github.com/keeyong/data-engineering-batch4.git
-cp -r data-engineering-batch4/dags/dags_v2/* dags
+cp -r data-engineering-batch4/dags/dags/* dags
 ```
 
 Visit your Airflow Web UI and we should see the DAGs from the repo. Some will have errors displayed and you need to add some variables and connections according to the slides 23 to 25 and 30 of "Airflow Deep-dive" preso.
@@ -196,7 +204,6 @@ and append the following lines to the end of the file:
 ```
 AIRFLOW_HOME=/var/lib/airflow
 export AIRFLOW_HOME
-
 cd ~/
 ```
 
@@ -207,13 +214,4 @@ airflow@ip-172-31-54-137:~/$ pwd
 /var/lib/airflow
 airflow@ip-172-31-54-137:~/$ echo $AIRFLOW_HOME
 /var/lib/airflow
-```
-
-
-## Add authentication to Airflow Webserver
-
-Run the following command line (make sure to change admin to something else):
-
-```
-airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
 ```
