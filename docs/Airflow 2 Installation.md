@@ -15,8 +15,8 @@ sudo apt-get install -y python3-pip
 #### Next install Airflow and other Python modules we need
 
 ```
-sudo apt-get install postgresql-server-dev-all
-sudo apt-get install postgresql-common
+sudo apt-get install -y postgresql-server-dev-all
+sudo apt-get install -y postgresql-common
 sudo pip3 install apache-airflow
 sudo pip3 install apache-airflow-providers-postgres[amazon]
 sudo pip3 install cryptography psycopg2-binary boto3 botocore
@@ -188,7 +188,7 @@ The last step is to copy the files under keeyong/data-engineering repo's dags_v2
 sudo su airflow
 cd ~/
 git clone https://github.com/keeyong/data-engineering-batch5.git
-cp -r data-engineering-batch4/dags/* dags
+cp -r data-engineering-batch5/dags/* dags
 ```
 
 Visit your Airflow Web UI and we should see the DAGs from the repo. Some will have errors displayed and you need to add some variables and connections according to the slides 23 to 25 and 30 of "Airflow Deep-dive" preso.
