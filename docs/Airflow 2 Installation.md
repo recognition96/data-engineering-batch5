@@ -18,7 +18,7 @@ sudo apt-get install -y python3-pip
 sudo apt-get install -y postgresql-server-dev-all
 sudo apt-get install -y postgresql-common
 sudo pip3 install apache-airflow
-sudo pip3 install apache-airflow-providers-postgres[amazon]
+sudo pip3 install apache-airflow-providers-postgres[amazon]==2.0.0
 sudo pip3 install cryptography psycopg2-binary boto3 botocore
 sudo pip3 install SQLAlchemy==1.3.23
 ```
