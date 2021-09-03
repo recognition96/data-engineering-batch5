@@ -49,11 +49,12 @@ def etl(**context):
 
 
 """
-CREATE TABLE raw_data.weather_forecast (
-    date datestamp,
+CREATE TABLE keeyong.weather_forecast (
+    date date,
     temp float,
     min_temp float,
-    max_temp float
+    max_temp float,
+    updated_date timestamp default GETDATE()
 );
 """
 
