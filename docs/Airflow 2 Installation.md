@@ -87,7 +87,7 @@ airflow.cfg  airflow.db  dags   logs  unittests.cfg
  * "executor"를 SequentialExecutor에서 LocalExecutor로 수정한다
  * DB 연결스트링("sql_alchemy_conn")을 앞서 설치한 Postgres로 바꾼다
    * 이 경우 ID와 PW와 데이터베이스 이름이 모두 airflow를 사용하고 호스트 이름은 localhost를 사용한다
- * "Load_examples" 설정을 False로 바꾼다
+ * "load_examples" 설정을 False로 바꾼다
  
 ```
 [core]
