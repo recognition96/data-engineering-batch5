@@ -14,7 +14,7 @@ def get_Redshift_connection():
     redshift_user = ""  # 본인 ID 사용
     redshift_pass = ""  # 본인 Password 사용
     port = 5439
-    dbname = "prod"
+    dbname = "dev"
     conn = psycopg2.connect("dbname={dbname} user={user} host={host} password={password} port={port}".format(
         dbname=dbname,
         user=redshift_user,
