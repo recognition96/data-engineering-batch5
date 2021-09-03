@@ -181,7 +181,7 @@ sudo systemctl status airflow-scheduler
 password의 값을 적당히 다른 값으로 바꾼다
 
 ```
-airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
+AIRFLOW_HOME=/var/lib/airflow airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
 ```
 
 그리고나서 본인 서버를 웹브라우저에서 포트번호 8080을 이용해 접근해보면 아래와 같은 로그인 화면이 실행되어야 한다. 예를 들어 본인 EC2 서버의 호스트 이름이 ec2-xxxx.us-west-2.compute.amazonaws.com이라면 https://ec2-xxxx.us-west-2.compute.amazonaws.com:8080/을 웹브라우저에서 방문해본다.
