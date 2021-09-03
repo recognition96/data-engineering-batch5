@@ -184,10 +184,12 @@ password의 값을 적당히 다른 값으로 바꾼다
 airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
 ```
 
+그리고나서 본인 서버를 웹브라우저에서 포트번호 8080을 이용해 접근해보면 아래와 같은 로그인 화면이 실행되어야 한다. 예를 들어 본인 EC2 서버의 호스트 이름이 ec2-xxxx.us-west-2.compute.amazonaws.com이라면 https://ec2-xxxx.us-west-2.compute.amazonaws.com:8080/을 웹브라우저에서 방문해본다.
 
-## Dag Installation from this repo:
 
-The last step is to copy the files under keeyong/data-engineering repo's dags_v2 folder to /var/lib/airflow/dags. Don't forget to add "-r" option in the "cp" command:
+## 이 Githut repo를 클론해서 dags 폴더에 있는 DAG들을 /var/lib/airflow/dags로 복사
+
+keeyong/data-engineering-batch5 repository에 있는 dags 폴더의 내용을 /var/lib/airflow/dags로 복사한다. 
 
 ```
 sudo su airflow
@@ -196,23 +198,25 @@ git clone https://github.com/keeyong/data-engineering-batch5.git
 cp -r data-engineering-batch5/dags/* dags
 ```
 
-Visit your Airflow Web UI and we should see the DAGs from the repo. Some will have errors displayed and you need to add some variables and connections according to the slides 23 to 25 and 30 of "Airflow Deep-dive" preso.
+그리고나서 Airflow 웹서버를 다시 방문해보면 DAG들이 몇개 보이고 일부 에러도 몇개 보일 것이다. 이 에러들은 과정 5주차와 6주차에 하나씩 해결한다.
 
 
-## Set AIRFLOW_HOME environment variable in ~/.bashrc (/var/lib/airflow/.bashrc)
+## Bash 파일(/var/lib/airflow/.bashrc)을 편집해서 airflow 사용자로 로그인시 (sudo su airflow등) AIRFLOW_HOME 환경변수가 자동설정되게 한다
 
-Once you switch to *airflow* user (sudo su airflow), execute the bashrc file first,
 ```
 airflow@ip-172-31-54-137:~$ vi ~/.bashrc
 ```
-and append the following lines to the end of the file:
+
+이 파일의 마지막에 다음 3개의 라인을 추가한다:
+ - i를 누르면 편집모드로 들어간다
+ - 파일을 저장하고 나오려면 콜론(:)을 누르고 wq!를 입력한다
 ```
 AIRFLOW_HOME=/var/lib/airflow
 export AIRFLOW_HOME
 cd ~/
 ```
 
-Log out of airflow user and log in again (sudo su airflow). Now you will start from the home directory. Also if you print out AIRFLOW_HOME environment variable, you will see it is set properly.
+exit을 실행하여 ubuntu 사용자로 나온 다음에 다시 airflow 사용자로 로그인하면 (sudo su airflow) 자동으로 홈디렉토리로 이동하고 AIRFLOW_HOME 환경변수가 설정되어 있음을 확인할 수 있다.
 ```
 ubuntu@ip-172-31-54-137:~$ sudo su airflow
 airflow@ip-172-31-54-137:~/$ pwd
