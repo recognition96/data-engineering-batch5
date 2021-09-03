@@ -1,5 +1,6 @@
 from airflow import DAG
-from airflow.operators import PythonOperator
+from airflow.operators.python import PythonOperator
+# from airflow.operators import PythonOperator
 from airflow.models import Variable
 from airflow.hooks.postgres_hook import PostgresHook
 
