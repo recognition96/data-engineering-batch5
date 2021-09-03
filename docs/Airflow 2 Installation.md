@@ -1,18 +1,17 @@
 # Airflow 2.0 Installation:
 
-These instructions are about installing Airflow on a Ubuntu server (not using Docker). We will be using Python 3. Python 2 is sunsetting.
-
+우분투에서 Airflow 2.0을 설치하는 방법에 대한 문서로 파이썬 3.0을 사용한다. 앞서 별도로 공유된 ssh 로그인 문서를 참조하여 할당된 EC2 서버로 로그인한다 (이 때 ubuntu 계정을 사용함).
 
 ## Airflow Python Module Installation
 
-#### First upgrade apt and install python3 pip
+#### 먼저 우분투의 소프트웨어 관리 툴인 apt-get을 업데이트하고 파이썬 3.0 pip을 설치한다.
 
 ```
 sudo apt-get update
 sudo apt-get install -y python3-pip
 ```
 
-#### Next install Airflow and other Python modules we need
+#### 다음으로 Airflow 2.0을 설치하고 필요 기타 모듈을 설치한다
 
 ```
 sudo apt-get install -y postgresql-server-dev-all
@@ -23,26 +22,29 @@ sudo pip3 install cryptography psycopg2-binary boto3 botocore
 sudo pip3 install SQLAlchemy==1.3.23
 ```
 
-## airflow:airflow Account Creation
+## airflow:airflow 계정 생성
 
-Create a dedicated group and account for Airflow. airflow account will have /var/lib/airflow as its home directory.
+우리가 설치할 airflow 서비스는 ubuntu 사용자가 아닌 airflow 사용자를 기반으로 실행될 예정이며 이를 위해 airflow 계정을 생성한다. airflow 계정의 홈디렉토리는  /var/lib/airflow로 설정한다
 
 ```
 sudo groupadd airflow
 sudo useradd -s /bin/bash airflow -g airflow -d /var/lib/airflow -m
 ```
 
-## Local Postgres Installation to store Airflow related info (DAGs, Tasks, Variables, Connections and so on)
+## Airflow의 정보가 저장될 데이터베이스로 사용될 Postgres 설치
 
-By default, Airflow will be launced with a SQLite database which is a single thread. Will change this to use a more performant database such as Postgres later.
+Airflow는 기본으로 SQLite 데이터베이스를 설치하는데 이는 싱글 쓰레드라 다수의 DAG 혹은 다수의 Task들이 동시에 실행되는 것을 지원하지 못한다. 이를 나중에 Postgres로 교체한다. 
 
-#### Install Postgres server
+#### Postgres 설치
 
 ```
 sudo apt-get install -y postgresql postgresql-contrib
 ```
 
-#### Next create a user and a database to be used by Airflow to store its data
+#### 다음으로 Airflow가 Postgres를 접속할 때 사용할 계정을 Postgres위에서 생성
+
+이를 위해서 postgres 사용자로 재로그인을 하고 postgres shell (psql)을 실행한 다음에 airflow라는 이름의 계정을 생성한다. 마지막에 exit를 실행해서 원래 ubuntu 계정으로 돌아가는 스텝을 잊지 않는다.
+
 ```
 $ sudo su postgres
 $ psql
@@ -57,19 +59,20 @@ postgres=# \q
 $ exit
 ```
 
-#### Restart Postgres
+#### Postgres를 재시작
 
-Move back to Ubuntu account by running "exit"
+이 명령은 ubuntu 계정에서만 실행이 가능함을 꼭 기억!
 
 ```
 sudo service postgresql restart
 ```
 
 
-## Initial Airflow Initialization
+## Airflow 첫 번째 초기화 
 
-#### First install Airflow with the default configuration and will change some configuration
+#### 앞서 설치된 Airflow를 실행하여 기본환경을 만든다
 
+이 때 SQLite가 기본 데이터베이스로 설정되며 이를 뒤에서 앞서 설치한 Postgres로 변경해주어야 한다.
 ```
 sudo su airflow
 $ cd ~/
@@ -79,12 +82,12 @@ $ ls /var/lib/airflow
 airflow.cfg  airflow.db  dags   logs  unittests.cfg
 ```
 
-#### Now edit /var/lib/airflow/airflow.cfg to do the following 3 things:
+#### Airflow 환경 파일(/var/lib/airflow/airflow.cfg)을 편집하여 다음 3가지를 바꾼다
 
- * change the "executor" to LocalExecutor from SequentialExecutor
- * change the db connection string ("sql_alchemy_conn") to point to the local Postgres installed above or a new one provided to you
-   * If you are going to use a locally installed Postgres DB here (like explained above), use airflow for ID, PASSWORD and DATABASE and use localhost for HOST
- * change Loadexample setting to False
+ * "executor"를 SequentialExecutor에서 LocalExecutor로 수정한다
+ * DB 연결스트링("sql_alchemy_conn")을 앞서 설치한 Postgres로 바꾼다
+   * 이 경우 ID와 PW와 데이터베이스 이름이 모두 airflow를 사용하고 호스트 이름은 localhost를 사용한다
+ * "Loadexample" 설정을 False로 바꾼다
  
 ```
 [core]
@@ -96,19 +99,20 @@ sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@localhost:5432/airflow
 load_examples = False
 ```
 
-#### Reinitialize Airflow DB
+#### Airflow를 재설정
 
 ```
 AIRFLOW_HOME=/var/lib/airflow airflow db init
 ```
 
 
-## Start Airflow Webserver and Scheduler
+## Airflow 웹서버와 스케줄러 실행
 
-To start up airflow scheduler and webserver as background services, follow the instructions here. Do this as <b>ubuntu</b> account (<b>not airflow</b>). If you get "[sudo] password for airflow: " error, you are still using airflow as your account. Exit so that you can use "ubuntu" account.
+Airflow 웹서버와 스케줄러를 백그라운드 서비스로 사용하려면 다음 명령을 따라하여 두 개를 서비스로 등록한다. 
+다음 명령들은 <b>ubuntu</b> 계정에서 실행되어야한다. 만일 "[sudo] password for airflow: " 메시지가 나온다면 지금 airflow 계정을 사용하고 있다는 것으로 이 경우 "exit" 명령을 실행해서 ubuntu 계정으로 돌아온다
 
 
-#### Create two files:
+#### 웹서버와 스케줄러를 각기 서비스로 등록
 
 sudo vi /etc/systemd/system/airflow-webserver.service
 
@@ -150,7 +154,7 @@ RestartSec=10s
 WantedBy=multi-user.target
 ```
 
-#### Run them as startup scripts. 
+#### 다음 명령을 실행하여 앞서 서비스들을 활성화 한다
 
 ```
 sudo systemctl daemon-reload
@@ -158,23 +162,23 @@ sudo systemctl enable airflow-webserver
 sudo systemctl enable airflow-scheduler
 ```
 
-Start them:
+서비스들을 시작한다:
 
 ```
 sudo systemctl start airflow-webserver
 sudo systemctl start airflow-scheduler
 ```
 
-To check the status of the services, run as follow:
+서비스들의 상태를 보고 싶다면 다음 명령을 실행한다:
 
 ```
 sudo systemctl status airflow-webserver
 sudo systemctl status airflow-scheduler
 ```
 
-## Add authentication to Airflow Webserver
+## 마지막으로 Airflow webserver에 로그인 어카운트를 생성한다
 
-Run the following command line (make sure to change admin to something else):
+password의 값을 적당히 다른 값으로 바꾼다
 
 ```
 airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
