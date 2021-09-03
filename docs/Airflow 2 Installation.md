@@ -200,6 +200,8 @@ cp -r data-engineering-batch5/dags/* dags
 
 그리고나서 Airflow 웹서버를 다시 방문해보면 DAG들이 몇개 보이고 일부 에러도 몇개 보일 것이다. 이 에러들은 과정 5주차와 6주차에 하나씩 해결한다.
 
+단 여기서 복사한 DAG들이 웹 서버에 나타나는데 시간이 좀 걸릴 수 있는데 그 이유는 Airflow가 기본적으로 5분 마다 한번씩 dags 폴더를 뒤져서 새로운 DAG이 있는지 보기 때문이다. 이 변수는 dag_dir_list_interval으로 airflow.cfg에서 확인할 수 있으며 기본값은 300초 (5분)이다. 
+
 
 ## Bash 파일(/var/lib/airflow/.bashrc)을 편집해서 airflow 사용자로 로그인시 (sudo su airflow등) AIRFLOW_HOME 환경변수가 자동설정되게 한다
 
