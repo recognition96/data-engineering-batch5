@@ -49,7 +49,7 @@ def load(lines):
     for l in lines:
         if l != '':
             (name, gender) = l.split(",")
-            sql += "INSERT INTO raw_data.name_gender VALUES ('{name}', '{gender}');"
+            sql += "INSERT INTO raw_data.name_gender VALUES ('{name}', '{gender}');".format(name=name, gender=gender)
     sql += "END;"
     logging.info(sql)
     """
