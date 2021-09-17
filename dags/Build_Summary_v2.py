@@ -22,7 +22,8 @@ dag = DAG(
 # this should be listed in dependency order (all in analytics)
 tables_load = [
     'user_summary',
-    'user_session_summary'
+    'user_session_summary',
+    'nps_summary'
 ]
 
 dag_root_path = os.path.dirname(os.path.abspath(__file__))
