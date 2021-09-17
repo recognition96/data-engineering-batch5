@@ -7,7 +7,7 @@
     WHEN score <= 6 THEN -1 END)::float*100/COUNT(1), 2)
 FROM keeyong.nps
 GROUP BY 1
-ORDER BY 1;
+ORDER BY 1;""",
           'input_check':
           [
             {
